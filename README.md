@@ -43,7 +43,7 @@ include or exclude.
     }`
 
 This modified example contains a kinda `hotplug` algorithm for the external sensor,
-using the global variable `sensor_present` and the function `reconnect_sensor()`. If, for one or other reason, the sensor gets disconnected, the script will not crash or halt. In the a case the external sensor is not connected or been disconnected, the script simply does not continue to show temperature and humidity readings until the sensor has been reconnected.
+using the global variable `sensor_present` and the function `reconnect_sensor()`. If, for one or other reason, the sensor gets disconnected, the script will not crash or halt. In the a case the external sensor is not connected or been disconnected, the script simply does not continue to show temperature and humidity readings. It displays a reminder to check the wiring, until the sensor has been reconnected.
 
 The example also contains modifications to control the `brilliance` of the leds.
 For this the global variable `brilliance` is used. The function `adj_val()` has been added to adjust the `r, g, b` values according to the value of 'brilliance'.
