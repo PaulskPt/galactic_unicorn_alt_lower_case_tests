@@ -1,8 +1,8 @@
 Introduction
 ============
 
-This repo contains a modified example 'GU_Workout_mod.py'.
-The originel by version is by Tony Goodhew - 13th Nov 2022.
+This repo contains a modified example: 'GU_Workout_mod.py'.
+The original by version is by Tony Goodhew - 13th Nov 2022.
 
 
 Hardware requirements
