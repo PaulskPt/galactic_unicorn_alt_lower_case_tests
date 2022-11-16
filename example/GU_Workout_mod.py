@@ -1,21 +1,17 @@
 # Pimoroni Galactic Unicorn Lower case character set and AHT20 sensing
-# Original version by Tony Goodhew - 13th Nov 2022
+# Tony Goodhew - 13th Nov 2022
 # See: https://www.instructables.com/Galactic-Unicorn-Graphical-Workout/
 # Needs ahtx0.py library and sensor for final part
 # Full character set included - No size adjustments - single size - not enough height for enlargement
 # To save space delete the extended characters not needed
 # Notes @PaulskPt:
-# a) For the ahtx0 modules, see: https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py
-# b) Moved several defitinions (like: font) to file GU_Workout_mod_ini.py.
-# c) I moved each test to an own function. Now you can choose which test(s) you want to run. 
-#    To do this, set the boolean variable for the appropriate test(s) in the tests_dict in file: GU_Workout_mod_ini.py.
-# b) Added a fail-safe external sensor (re)connect function. See: reconnect_sensor().
-# d) Added global brill variable and function adj_val() to reduce brilliance and adjust other  r, g, b values accordingly.
-# e) Added global my_debug variable. Set this to see more output to the REPL.
+# a) See: https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py
+# b) Added a kinda `hotplug` algorithm for the external sensor
+# c) Added global brill variable and function adj_val() to reduce brilliance and adjust other of the r, g, b values accorindingly
 #
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
-import time
+import time, sys
 from machine import Pin, I2C
 
 # Added by @PaulskPt:
@@ -317,6 +313,9 @@ def temp_sensor_test():
             scroll(msg, 2, brill, p1, p2)
             break
         else:
+            scroll("No sensor data. Check wiring...", 2, brill, 0, 0)
+            gu.update(gr)
+            time.sleep(2)
             if reconnect_sensor():
                 if my_debug:
                     print("Temperature sensor has been (re)connected")
@@ -336,22 +335,34 @@ def doit(s):
     if s == "temp":
         temp_sensor_test()
 
-
-print(f"Starting tests...")
-print(f"by Tony Goodhew")
-# Run tests that are enabled in do_tests_dict
-for k,v in tests_dict.items():
-    #print(f"v= {v}")
-    if v[1]:
-        doit(v[0])
-
-#================================================================================
-# Tidy up
-clear()
-prnt_st("Done", 15, 1, 0,brill-50, 0)
-print("Tests done")
-gu.update(gr)
-time.sleep(1.5)
-gr.set_pen(BLACK)
-gr.clear()
-gu.update(gr)
+stop = False
+print("Starting tests...")
+print("by Tony Goodhew (@tonygo2)")
+print("modified by Paulus Schulinck (@PaulskPt)")
+while True:
+    try:
+        # Run tests that are enabled in do_tests_dict
+        for k,v in tests_dict.items():
+            #print(f"v= {v}")
+            if v[1]:
+                doit(v[0])
+        clear()
+        prnt_st("Done", 15, 1, 0,brill-50, 0)
+        print("Tests done")
+        time.sleep(2)
+        print()
+        print("Going around...")
+        clear()
+    except KeyboardIntterupt:
+        print("Interrupted by user. Exiting...")
+        stop = True
+ 
+if stop:
+    #================================================================================
+    # Tidy up
+    gu.update(gr)
+    time.sleep(1.5)
+    gr.set_pen(BLACK)
+    gr.clear()
+    gu.update(gr)
+    sys.exit()

@@ -1,22 +1,16 @@
-#
-# 2022-11-16
-# Note: @PaulskPt:
-# Added tests_dict dictionary so you can decide which test(s) you want to run
-#
-tests_dict = {
-    0: ["ga",      False],  # Set to False for test you won't want to run
-    1: ["rect",    False],
-    2: ["tonygo2", True],
-    3: ["light",   False],
-    4: ["temp",    True]
-}
-#
 # ===========Start of FONTS Section=========================
 # Standard ASCII 5x8 font
 # https://gist.github.com/tdicola/229b3eeddc12d58fb0bc724a9062aa05
 # Came inside GU_Workout.py from:
 # https://www.instructables.com/Galactic-Unicorn-Graphical-Workout/
-#
+tests_dict = {
+    0: ["ga",      False],
+    1: ["rect",    False],
+    2: ["tonygo2", True],
+    3: ["light",   False],
+    4: ["temp",    True]
+}
+
 FONT_HEIGHT = 8
 FONT_WIDTH = 5
 FONT = bytes([
