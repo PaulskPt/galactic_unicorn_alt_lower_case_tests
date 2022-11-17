@@ -34,7 +34,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-"""
+
 """
 MicroPython driver for the AHT10 and AHT20 Humidity and Temperature Sensor
 Author(s): Andreas Bühl, Kattni Rembor
