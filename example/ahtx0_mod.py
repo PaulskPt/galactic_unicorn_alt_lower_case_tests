@@ -6,9 +6,9 @@
 # THIS IS A MODIFIED VERSION, TO WORK WITH A PIMORONI GALACTIC UNICORN (PIM 631)
 # WITH MICROPYTHON
 # Mods By @PaulskPt:
-# - added three const definitions
+# - added three const definitions like: AHTX0_ERROR_PERFORM_MEASUREMENT
 # - added variable: self._errstat (defaults to 0x00)
-# - added Property e_status like: AHTX0_ERROR_PERFORM_MEASUREMENT
+# - added Property e_status
 # - added function clr_errstat()
 # - modified functions: temperature(), _read_to_buffer(), _trigger_measurement and _perform_measurement
 # =====================================================================================================
