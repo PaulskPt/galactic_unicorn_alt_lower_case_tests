@@ -24,6 +24,11 @@ For the external ATH20 sensor you need:
 
 * `ahtx0 module: <https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py<`_
 
+Added is an `experimental version` of the `ahtx0 module` (work-in-progress). 
+In the `class AHT10` I added the function `e_status()` and a varialbe: `self._errstat`
+while the functions `temperature`, `_read_to_buffer`, `_trigger_measurement` and `perform_measurement` are modified
+to handle/report errors to `self._err_stat` and to `REPL`.
+
 About this modified Example
 ===========================
 

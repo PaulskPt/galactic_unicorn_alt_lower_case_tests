@@ -8,6 +8,7 @@
 # a) See: https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py
 # b) Added a kinda `hotplug` algorithm for the external sensor
 # c) Added global brill variable and function adj_val() to reduce brilliance and adjust other of the r, g, b values accorindingly
+# d) Added reset button (the SLEEP button (right, middle))
 #
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
@@ -30,6 +31,10 @@ gr = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 
 # create our GalacticUnicorn object
 gu = GalacticUnicorn()
+
+rst_button = machine.Pin(gu.SWITCH_SLEEP, machine.Pin.IN, machine.Pin.PULL_UP)
+
+
 
 brill = 100 # Using brill to make default brilliance less strong
 
@@ -76,6 +81,18 @@ def prnt_st(asci, xx, yy, r, g, b):  # Text string
         asci = ord(letter)
         character(asci, xx, yy, r, g, b)
         xx = xx + move
+        
+def handle_rst(pin):
+    if pin == rst_button:
+        print("Going to reset...")
+        gr.set_pen(gr.create_pen(0, 0, 0))
+        gr.clear()
+        prnt_st("Reset...", 6, 2, brill, 0, 0) # Text examples
+        gu.update(gr)
+        time.sleep(2)
+        machine.reset()
+
+rst_button.irq(trigger=machine.Pin.IRQ_FALLING, handler=handle_rst)
 
 def cntr_st(s, y, r, g, b): # Centres text on line y
     w = 6 
@@ -99,7 +116,7 @@ def scroll(msg, yy, r, g, b):
 
 def reconnect_sensor():
     global sensor_present, sensor, ahtx0
-
+    TAG= "reconnect_sensor(): "
     if not sensor_present:
         if ahtx0 is None:
             import ahtx0
@@ -107,12 +124,32 @@ def reconnect_sensor():
             i2c = I2C(id=0,scl=Pin(5), sda=Pin(4))
             sensor = ahtx0.AHT20(i2c)
         except ValueError as exc:  # ValueError occurs if the temperature sensor is not connected
+            print(TAG+f"ValueError= {exc}")
             pass
-        except OSError:
+        except OSError as exc:
+            print(TAG+f"OSError= {exc}")
             pass
-
+        except RuntimeError as exc:
+            print(TAG+f"exc.args[0]= {exc.args[0]}")
+            if "Could not initialize" in exc.args[0]:
+                print(TAG+f"Other error {exc} occurred.")
+                scroll("Check wiring.", 2, brill, 0, 0)
+                sensor_present = False
+                gu.update(gr)
+                print("Going to reset board...")
+                time.sleep(2)
+                machine.reset()
+                pass
         if sensor is not None:
             sensor_present = True
+        else:
+            sensor_present = False
+    else:
+        if sensor.e_status != 0:
+            print("Going to reset board...")
+            time.sleep(2)
+            machine.reset()
+            
     if sensor_present:
         return True
     return False
@@ -193,13 +230,19 @@ def rect_test():
     gu.update(gr)
 
 def tonygo2_test():
+    both = False
     print("TonyGo2 test")
     # prnt_st(asci, xx, yy, r, g, b):  # Text string
     prnt_st("TonyGo2", 6, 2, brill, 0, 0) # Text examples
     gu.update(gr)
     time.sleep(2)
-    scroll("Lower case", 2, 0, 0, brill)
+    clear()
+    scroll("& PaulskPt", 2, 0, brill, 0) # 6, 2, brill, 0, 0) # Text examples
     gu.update(gr)
+    time.sleep(2)
+    if both:
+        scroll("Lower case", 2, 0, 0, brill)
+        gu.update(gr)
     clear()
 
 def light_sensor_test():
@@ -285,44 +328,56 @@ gr.clear()
 # AHT20 fitted to Stemma/QT socket = Comment out if not available
 def temp_sensor_test():
     global sensor_present, sensor
+    TAG= "temp_sensor_test(): "
     print("Temp & Hum test")
-    while True:            
-        if sensor_present:
-            """
-            i2c = I2C(id=0,scl=Pin(5), sda=Pin(4))
-            # Create the sensor object using I2C
-            sensor = ahtx0.AHT20(i2c)
-            """
-            cntr_st("AHT20", 2, 0, 300, 0)
-            gu.update(gr)
-            time.sleep(2)
-            clear()
-            cntr_st("Sensor", 2, 0, 300, 0)
-            gu.update(gr)
-            time.sleep(1.3)
-            clear()
-
-            t = int(sensor.temperature * 10 + 0.5) /10
-            h = sensor.relative_humidity
-            msg = str(t) + chr(248) + "C & Hum " + str(int(h + 0.5)) +" %" # degrees
-            q = brill/255
-            p1 = adj_val(100)  # adjust relative to global var brill value
-            p2 = adj_val(20)   # same
-            if my_debug:
-                print(f"temp_sensor_test(): brill//255= {brill}//255= {q}, p1= {p1}, p2= {p2}")
-            scroll(msg, 2, brill, p1, p2)
-            break
-        else:
-            scroll("No sensor data. Check wiring...", 2, brill, 0, 0)
-            gu.update(gr)
-            time.sleep(2)
+    while True:
+        try:
             if reconnect_sensor():
-                if my_debug:
-                    print("Temperature sensor has been (re)connected")
-            else:
-                print("Failed to reconnect temperature sensor")
-                break
+                if sensor.e_status == 0:
+                    print(TAG+f"sensor_present= {sensor_present}")
+                    """
+                    i2c = I2C(id=0,scl=Pin(5), sda=Pin(4))
+                    # Create the sensor object using I2C
+                    sensor = ahtx0.AHT20(i2c)
+                    """
+                    cntr_st("AHT20", 2, 0, 300, 0)
+                    gu.update(gr)
+                    time.sleep(2)
+                    clear()
+                    cntr_st("Sensor", 2, 0, 300, 0)
+                    gu.update(gr)
+                    time.sleep(1.3)
+                    clear()
 
+                    t = int(sensor.temperature * 10 + 0.5) /10
+                    if t < 0.0:
+                        print(TAG+"Received error value: {t}")
+                        break
+                    h = sensor.relative_humidity
+                    print(TAG+f"temp= {t}, hum= {h}")
+                    msg = str(t) + chr(248) + "C & Hum " + str(int(h + 0.5)) +" %" # degrees
+                    q = brill/255
+                    p1 = adj_val(100)  # adjust relative to global var brill value
+                    p2 = adj_val(20)   # same
+                    if my_debug:
+                        print(TAG+f"temp_sensor_test(): brill//255= {brill}//255= {q}, p1= {p1}, p2= {p2}")
+                    scroll(msg, 2, brill, p1, p2)
+                    break
+                else:
+                    print(TAG+f"sensor.e_status= {sensor.e_status}")
+                    scroll("Check wiring.", 2, brill, 0, 0)
+                    gu.update(gr)
+                    time.sleep(2)
+            else:
+                #scroll("No sensor data. Check wiring...", 2, brill, 0, 0)
+                scroll("Check wiring.", 2, brill, 0, 0)
+                gu.update(gr)
+                print(TAG+"Failed to reconnect temperature sensor")
+                time.sleep(2)
+                break
+        except KeyboardInterrupt:
+            print(TAG+"Interrrupt by user. Exiting...")
+            sys.exit()
 def doit(s):
     if s == "ga":
         ga_test()
@@ -353,9 +408,10 @@ while True:
         print()
         print("Going around...")
         clear()
-    except KeyboardIntterupt:
+    except KeyboardInterrupt:
         print("Interrupted by user. Exiting...")
         stop = True
+        break
  
 if stop:
     #================================================================================
