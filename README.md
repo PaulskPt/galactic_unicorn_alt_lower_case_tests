@@ -56,3 +56,4 @@ For this the global variable `brilliance` is used. The function `adj_val()` has 
 I added global boolean variable `my_debug`. Set this variable to see more output to the REPL.
 Finally I added a `Reset` button (the `SLEEP` button middle, right on the board). Pressing this button will reset the microcontroller.
 
+
