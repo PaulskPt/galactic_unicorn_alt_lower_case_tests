@@ -156,7 +156,7 @@ def reconnect_sensor():
             if sensor is None:
                 ck_wiring_msg(TAG, "failed to (re)connect sensor")
         except ValueError as exc:  # ValueError occurs if the temperature sensor is not connected
-            msg = exc.args[0]
+            msg = "ValueError: "++str(exc.args[0])
             wiring_msg = True
             pass
         except OSError as exc:
@@ -164,7 +164,7 @@ def reconnect_sensor():
             wiring_msg = True
             pass
         except RuntimeError as exc:
-            msg = exc.args[0]
+            msg = "RuntimeError: "+str(exc.args[0])
             wiring_msg = True
             pass
         if wiring_msg:
