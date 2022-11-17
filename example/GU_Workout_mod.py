@@ -25,7 +25,6 @@ use_sensor = True
 
 if use_sensor:
     sensor_present = False
-    ahtx0 = None
     sensor = None
 
 # create a PicoGraphics framebuffer to draw into
