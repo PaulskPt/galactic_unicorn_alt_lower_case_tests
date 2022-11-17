@@ -9,20 +9,20 @@ Hardware requirements
 =====================
 
 - `Pimoroni Galactic Unicorn (PIM 631) <https://shop.pimoroni.com/products/galactic-unicorn?variant=40057440960595>`
-- `Adafruit AHT20 - Temperature & Humidity Sensor Breakout Board - STEMMA QT / Qwiic <https://www.adafruit.com/product/4566>`
-- `Adafruit STEMMA QT / Qwiic JST SH 4-Pin Cable - 400mm long. <https://www.adafruit.com/product/5385>`
-- `or Adafruit STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long <https://www.adafruit.com/product/4210>`
+- `Adafruit AHT20 - Temperature & Humidity Sensor Breakout Board - STEMMA QT / Qwiic` <https://www.adafruit.com/product/4566>
+- `Adafruit STEMMA QT / Qwiic JST SH 4-Pin Cable - 400mm long.` <https://www.adafruit.com/product/5385>
+- `or Adafruit STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long` <https://www.adafruit.com/product/4210>
 
 
 Software dependencies
 =============
 The Pimoroni Galactic Unicorn needs the latest 'pimoroni' version of micropython .uf file:
 
-* `pimoroni-picow_galactic_unicorn-v1.19.9-micropython.uf2 <https://github.com/pimoroni/pimoroni-pico/releases/tag/v1.19.9>`_
+* `pimoroni-picow_galactic_unicorn-v1.19.9-micropython.uf2` <https://github.com/pimoroni/pimoroni-pico/releases/tag/v1.19.9>
 
 For the external ATH20 sensor you need:
 
-* `ahtx0 module: <https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py<`_
+* `ahtx0 module:` <https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py>
 
 Added is an `experimental version` of the `ahtx0 module` (work-in-progress). 
 In the `class AHT10` I added the function `e_status()` and a variable: `self._errstat`
@@ -56,5 +56,4 @@ For this the global variable `brilliance` is used. The function `adj_val()` has 
 I added global boolean variable `my_debug`. Set this variable to see more output to the REPL.
 
 Finally I added a `Reset` button (the `SLEEP` button middle, right on the board). Pressing this button will reset the microcontroller.
-
 
