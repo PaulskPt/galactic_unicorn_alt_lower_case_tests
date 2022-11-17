@@ -6,7 +6,7 @@
 # To save space delete the extended characters not needed
 # Notes modifications by @PaulskPt:
 # a) This script uses a modified version of the ahtx0.py file.
-#    The name of the modified version is: ahtx0_mod.py. 
+#    The name of the modified version is: ahtx0_mod.py.
 #    The modified module contains changes needed for signalling and resetting error status.
 # b) Added a `hotplug` algorithm for the external sensor
 # c) Added global brill variable and function adj_val() to reduce brilliance and adjust other of the r, g, b values accorindingly
@@ -114,19 +114,19 @@ def scroll(msg, yy, r, g, b):
         time.sleep(0.1)
 # =========== End of font support routines ===========
 
-def ck_wiring_msg(TAG, exc):
+def ck_wiring_msg(TAG, msg):
 
     if sensor is not None:
         if sensor.e_status > 0x0:
             print(TAG+"sensor.e_status= 0x{:x}".format(sensor.e_status))
             sensor.clr_errstat() # clear the status after been read
-        if exc is not None:
-            print(TAG+f"Error: {exc}")
-        else:
-            clear()
-            scroll("Check wiring.", 2, brill, 0, 0)
-            gu.update(gr)
-            time.sleep(2)
+    if msg is not None:
+        print(TAG+f"Error: {msg}")
+
+    clear()
+    scroll("Check sensor wiring", 2, brill, 0, 0)
+    gu.update(gr)
+    time.sleep(2)
         
 def ck_sensor_present():
     global sensor, sensor_present
@@ -139,31 +139,38 @@ def reconnect_sensor():
     global sensor_present, sensor, ahtx0
     TAG= "reconnect_sensor(): "
     wiring_msg = False
+    msg = None
     ck_sensor_present()
     if not sensor_present:
         if ahtx0 is None:
             import ahtx0_mod
         try:
+            print(TAG+"attempt to (re)connect sensor")
             i2c = I2C(id=0,scl=Pin(5), sda=Pin(4))
             # And a short delay to wait until the I2C port has finished activating.
             # See: https://forum.micropython.org/viewtopic.php?t=4746  by Frida on 2017-12-27 at 8:52am
             time.sleep_ms(100)
             sensor = ahtx0_mod.AHT20(i2c)
+            if sensor is None:
+                ck_wiring_msg(TAG, "failed to (re)connect sensor")
         except ValueError as exc:  # ValueError occurs if the temperature sensor is not connected
+            msg = exc.args[0]
             wiring_msg = True
             pass
         except OSError as exc:
+            msg = exc.args[0]
             wiring_msg = True
             pass
         except RuntimeError as exc:
+            msg = exc.args[0]
             wiring_msg = True
             pass
         if wiring_msg:
-            ck_wiring_msg(TAG, exc)
+            ck_wiring_msg(TAG, msg)
         ck_sensor_present()
     else:
         if sensor.e_status != 0:
-            ck_wiring_msg(TAG, None)
+            ck_wiring_msg(TAG, msg)
             ck_sensor_present()
     if sensor_present:
         return True
@@ -348,6 +355,10 @@ def temp_sensor_test():
         try:
             if reconnect_sensor():
                 if sensor.e_status == 0:
+                    t = int(sensor.temperature * 10 + 0.5) /10
+                    if t < 0.0 or t >= 240.0:
+                        print(TAG+f"Received out of range value: {t}")
+                        break
                     cntr_st("AHT20", 2, 0, 300, 0)
                     gu.update(gr)
                     time.sleep(2)
@@ -356,10 +367,6 @@ def temp_sensor_test():
                     gu.update(gr)
                     time.sleep(1.3)
                     clear()
-                    t = int(sensor.temperature * 10 + 0.5) /10
-                    if t < 0.0 or t >= 240.0:
-                        print(TAG+f"Received out of range value: {t}")
-                        break
                     h = sensor.relative_humidity
                     print(TAG+f"temp= {t}, hum= {h}")
                     msg = str(t) + chr(248) + "C & Hum " + str(int(h + 0.5)) +" %" # degrees
@@ -370,8 +377,8 @@ def temp_sensor_test():
                         print(TAG+f"temp_sensor_test(): brill//255= {brill}//255= {q}, p1= {p1}, p2= {p2}")
                     scroll(msg, 2, brill, p1, p2)
                     break
-            else:
-                break
+            #else:
+            #    break
         except KeyboardInterrupt:
             print(TAG+"Interrrupt by user. Exiting...")
             sys.exit()
