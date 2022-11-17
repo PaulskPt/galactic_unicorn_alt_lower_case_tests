@@ -1,4 +1,4 @@
-Thursday 2022-11-17 15h41 utc
+Thursday 2022-11-17 19h33 utc
 
 Platform: Pimoroni Galactic Unicorn
 Example: GU_Workout_mod.py
@@ -7,7 +7,6 @@ See: https://github.com/PaulskPt/galactic_unicorn_alt_lower_case_tests
 IDE: Thonny
 
 REPL Output:
-
 MicroPython 9dfabcd on 2022-10-19; Raspberry Pi Pico W with RP2040
 
 Type "help()" for more information.
@@ -18,41 +17,27 @@ modified by Paulus Schulinck (@PaulskPt)
 TonyGo2 test
 temp_sensor_test(): Temp & Hum test
 reconnect_sensor(): attempt to (re)connect sensor
-temp_sensor_test(): temp= 24.7, hum= 68.28622
+temp_sensor_test(): temp= 24.1, hum= 65.85779
 Tests done
 
 Going around...
 TonyGo2 test
 temp_sensor_test(): Temp & Hum test
-temp_sensor_test(): temp= 24.4, hum= 70.11099
+temp_sensor_test(): temp= 24.1, hum= 66.05635
 Tests done
 
 Going around...
 TonyGo2 test
 temp_sensor_test(): Temp & Hum test
-AHT10._errstat= 0x20                     <<<=== sensor disconnected
-_trigger_measurement(): check wiring!
+AHT10._errstat= 0x20
+_trigger_measurement(): check wiring!           <<== Sensor is disconnected
 temperature(): self._errstat= 32
-temp_sensor_test(): Received out of range value: 240.0
+temp_sensor_test(): Received temperature value is out of range: 240.0 
 Tests done
 
 Going around...
 TonyGo2 test
 temp_sensor_test(): Temp & Hum test
 reconnect_sensor(): sensor.e_status= 0x20
-AHT10._errstat= 0x20
-_trigger_measurement(): check wiring!
-temperature(): self._errstat= 32
-temp_sensor_test(): Received out of range value: 240.0
-Tests done
-
-Going around...
-TonyGo2 test
-temp_sensor_test(): Temp & Hum test
-reconnect_sensor(): sensor.e_status= 0x20
-AHT10._errstat= 0x20
-_trigger_measurement(): check wiring!
-temperature(): self._errstat= 32
-temp_sensor_test(): Received out of range value: 240.0
-Tests done
-
+reconnect_sensor(): Check sensor wiring          <<== Sensor is disconnected
+temp_sensor_test(): temp= 24.8, hum= 65.81993    <<== After re-connecting the AHT20 sensor
