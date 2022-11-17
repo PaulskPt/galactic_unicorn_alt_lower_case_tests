@@ -2,13 +2,13 @@ Introduction
 ============
 
 This repo contains a modified example: 'GU_Workout_mod.py'.
-The original by version is by Tony Goodhew - 13th Nov 2022: ´<https://forums.pimoroni.com/t/galactic-unicorn-lower-case-text/20727>`
+The original by version is by Tony Goodhew - 13th Nov 2022: ´<https://forums.pimoroni.com/t/galactic-unicorn-lower-case-text/20727>
 
 
 Hardware requirements
 =====================
 
-- `Pimoroni Galactic Unicorn (PIM 631) <https://shop.pimoroni.com/products/galactic-unicorn?variant=40057440960595>`
+- `Pimoroni Galactic Unicorn (PIM 631)` <https://shop.pimoroni.com/products/galactic-unicorn?variant=40057440960595>
 - `Adafruit AHT20 - Temperature & Humidity Sensor Breakout Board - STEMMA QT / Qwiic` <https://www.adafruit.com/product/4566>
 - `Adafruit STEMMA QT / Qwiic JST SH 4-Pin Cable - 400mm long.` <https://www.adafruit.com/product/5385>
 - `or Adafruit STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long` <https://www.adafruit.com/product/4210>
