@@ -54,4 +54,5 @@ The example also contains modifications to control the `brilliance` of the leds.
 For this the global variable `brilliance` is used. The function `adj_val()` has been added to adjust the `r, g, b` values according to the value of 'brilliance'.
 
 I added global boolean variable `my_debug`. Set this variable to see more output to the REPL.
+Finally I added a `Reset` button (the `SLEEP` button middle, right on the board). Pressing this button will reset the microcontroller.
 
