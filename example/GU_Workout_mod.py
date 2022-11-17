@@ -123,6 +123,7 @@ def ck_wiring_msg(TAG, msg):
     if msg is not None:
         print(TAG+f"Error: {msg}")
 
+    print(TAG+"check sensor wiring")
     clear()
     scroll("Check sensor wiring", 2, brill, 0, 0)
     gu.update(gr)
@@ -158,7 +159,7 @@ def reconnect_sensor():
             wiring_msg = True
             pass
         except OSError as exc:
-            msg = exc.args[0]
+            msg = "OSError: "+str(exc.args[0])
             wiring_msg = True
             pass
         except RuntimeError as exc:
@@ -357,7 +358,7 @@ def temp_sensor_test():
                 if sensor.e_status == 0:
                     t = int(sensor.temperature * 10 + 0.5) /10
                     if t < 0.0 or t >= 240.0:
-                        print(TAG+f"Received out of range value: {t}")
+                        print(TAG+f"Received temperature value is out of range: {t}")
                         break
                     cntr_st("AHT20", 2, 0, 300, 0)
                     gu.update(gr)
@@ -377,6 +378,8 @@ def temp_sensor_test():
                         print(TAG+f"temp_sensor_test(): brill//255= {brill}//255= {q}, p1= {p1}, p2= {p2}")
                     scroll(msg, 2, brill, p1, p2)
                     break
+            #else:
+            #    break
         except KeyboardInterrupt:
             print(TAG+"Interrrupt by user. Exiting...")
             sys.exit()
