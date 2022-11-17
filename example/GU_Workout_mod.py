@@ -377,8 +377,6 @@ def temp_sensor_test():
                         print(TAG+f"temp_sensor_test(): brill//255= {brill}//255= {q}, p1= {p1}, p2= {p2}")
                     scroll(msg, 2, brill, p1, p2)
                     break
-            #else:
-            #    break
         except KeyboardInterrupt:
             print(TAG+"Interrrupt by user. Exiting...")
             sys.exit()
