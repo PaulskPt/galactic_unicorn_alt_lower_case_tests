@@ -115,35 +115,36 @@ def scroll(msg, yy, r, g, b):
 # =========== End of font support routines ===========
 
 def ck_wiring_msg(TAG, msg):
-
+    if TAG is None:
+        TAG = "ck_wiring_msg(): "
     if sensor is not None:
         if sensor.e_status > 0x0:
             print(TAG+"sensor.e_status= 0x{:x}".format(sensor.e_status))
             sensor.clr_errstat() # clear the status after been read
     if msg is not None:
         print(TAG+f"Error: {msg}")
-
-    print(TAG+"check sensor wiring")
+    s = "Check sensor wiring"
+    print(TAG+s)
     clear()
-    scroll("Check sensor wiring", 2, brill, 0, 0)
+    scroll(s, 2, brill, 0, 0)
     gu.update(gr)
     time.sleep(2)
         
 def ck_sensor_present():
-    global sensor, sensor_present
+    global sensor_present
     if sensor is not None:
         sensor_present = True
     else:
         sensor_present = False
 
 def reconnect_sensor():
-    global sensor_present, sensor, ahtx0
+    global sensor_present, sensor
     TAG= "reconnect_sensor(): "
     wiring_msg = False
     msg = None
     ck_sensor_present()
     if not sensor_present:
-        if ahtx0 is None:
+        if sensor is None:
             import ahtx0_mod
         try:
             print(TAG+"attempt to (re)connect sensor")
