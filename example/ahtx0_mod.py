@@ -1,6 +1,17 @@
 # Downloaded from: https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py
 # On 2022-11-16 by @PaulskPt
 #
+# ATTENTION:
+# =====================================================================================================
+# THIS IS A MODIFIED VERSION, TO WORK WITH A PIMORONI GALACTIC UNICORN (PIM 631)
+# WITH MICROPYTHON
+# Mods By @PaulskPt:
+# - added three const definitions
+# - added variable: self._errstat (defaults to 0x00)
+# - added Property e_status like: AHTX0_ERROR_PERFORM_MEASUREMENT
+# - added function clr_errstat()
+# - modified functions: temperature(), _read_to_buffer(), _trigger_measurement and _perform_measurement
+# =====================================================================================================
 # The MIT License (MIT)
 #
 # Copyright (c) 2020 Kattni Rembor for Adafruit Industries
@@ -23,6 +34,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+"""
 """
 MicroPython driver for the AHT10 and AHT20 Humidity and Temperature Sensor
 Author(s): Andreas Bühl, Kattni Rembor
@@ -88,6 +100,9 @@ class AHT10:
     def e_status(self):
         return self._errstat
     
+    def clr_errstat(self):
+        self._errstat = const(0x00)
+    
     @property
     def relative_humidity(self):
         """The measured relative humidity in percent."""
@@ -141,7 +156,7 @@ class AHT10:
                 self._errstat |= AHTX0_ERROR_TRIGGER_MEASUREMENT
                 print("AHT10._errstat= 0x{:x}".format(self._errstat))
                 print("_trigger_measurement(): check wiring!")
-            pass
+            raise
 
     def _wait_for_idle(self):
         """Wait until sensor can receive a new command"""

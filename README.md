@@ -20,14 +20,13 @@ The Pimoroni Galactic Unicorn needs the latest 'pimoroni' version of micropython
 
 * `pimoroni-picow_galactic_unicorn-v1.19.9-micropython.uf2` <https://github.com/pimoroni/pimoroni-pico/releases/tag/v1.19.9>
 
-For the external ATH20 sensor you need:
-
-* `ahtx0 module:` <https://github.com/targetblank/micropython_ahtx0/blob/master/ahtx0.py>
-
-Added is an `experimental version` of the `ahtx0 module` (work-in-progress). 
-In the `class AHT10` I added the function `e_status()` and a variable: `self._errstat`
-while the functions `temperature`, `_read_to_buffer`, `_trigger_measurement` and `perform_measurement` are modified
-to handle/report errors to `self._err_stat` and to `REPL`.
+For the external ATH20 sensor in combination with this example you need:
+- a `modified version` of `ahtx0.py` module. The name of the modified module is: `ahtx0_mod.py`.
+  The modified module is added to this example repo.
+In the `class AHT10` I added a property `e_status`, a variable: `self._errstat` and a function clr_errstat(),
+to clear the error status after reading.
+The functions `temperature`, `_read_to_buffer`, `_trigger_measurement` and `perform_measurement` are modified
+to set/clear `self._err_stat` and to print to `REPL`.
 
 About this modified Example
 ===========================
@@ -47,10 +46,10 @@ include or exclude.
         4: ["temp",    True]
     }`
 
-This modified example contains a kinda `hotplug` algorithm for the external sensor,
-using the global variable `sensor_present` and the function `reconnect_sensor()`. If, for one or other reason, the sensor gets disconnected, the script will not crash. In the a case the external sensor is not connected or been disconnected, the script simply does not continue to show temperature and humidity readings. It displays a reminder to check the wiring, until the sensor has been reconnected. Sometimes you have to press the `Reset (Sleep)` button to get the sensor object properly initialized (I used about the same algorithm in CircuitPython. There this algorithm works really plug-and-play).
+This modified example contains a `hotplug` algorithm for the external sensor,
+using the global variable `sensor_present` and the function `reconnect_sensor()`. If, for one or other reason, the sensor gets disconnected, the script will not crash. In the a case the external sensor is not connected or been disconnected, the script simply does not continue to show temperature and humidity readings. Instead it displays a reminder to check the wiring, until the sensor has been reconnected. Then the displaying of the temperature and humidity values continue.
 
-The example also contains modifications to control the `brilliance` of the leds.
+The example also contains modifications to `dim` the `brilliance` of the leds.
 For this the global variable `brilliance` is used. The function `adj_val()` has been added to adjust the `r, g, b` values according to the value of 'brilliance'.
 
 I added global boolean variable `my_debug`. Set this variable to see more output to the REPL.
