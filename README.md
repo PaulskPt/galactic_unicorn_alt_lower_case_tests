@@ -2,7 +2,7 @@ Introduction
 ============
 
 This repo contains a modified example: 'GU_Workout_mod.py'.
-The original by version is by Tony Goodhew - 13th Nov 2022.
+The original by version is by Tony Goodhew - 13th Nov 2022: ´<https://forums.pimoroni.com/t/galactic-unicorn-lower-case-text/20727>`
 
 
 Hardware requirements
